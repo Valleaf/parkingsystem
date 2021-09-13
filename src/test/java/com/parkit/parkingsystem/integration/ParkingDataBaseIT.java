@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
@@ -42,7 +41,7 @@ public class ParkingDataBaseIT {
     @BeforeAll
     private static void setUp() throws Exception {
         parkingSpotDAO = new ParkingSpotDAO();
-        parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
+        parkingSpotDAO.setDataBaseConfig(dataBaseTestConfig);
         ticketDAO = new TicketDAO();
         ticketDAO.setDataBaseConfig(dataBaseTestConfig);
         dataBasePrepareService = new DataBasePrepareService();
@@ -89,7 +88,7 @@ public class ParkingDataBaseIT {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
         Date currentTime = DateUtils.round(new Date(), Calendar.MINUTE);
-        // TODO: check that the fare generated and out time are populated correctly in
+        // Check that the fare generated and out time are populated correctly in
         // the database
         try {
             Ticket ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
@@ -98,10 +97,10 @@ public class ParkingDataBaseIT {
             double ticketPrice = ticket.getPrice();
             System.out.println(ticketPrice);
             System.out.println(timeOnTicket);
-            assertEquals(ticketPrice, 0.0, "Prices do not match, should be 0");
+            assertEquals(0.0, ticketPrice, "Prices do not match, should be 0");
             assertEquals(timeOnTicket, currentTime, "Time on ticket does not match");
         } catch (Exception e) {
-            // TODO: handle exception
+            e.printStackTrace();
         }
     }
 

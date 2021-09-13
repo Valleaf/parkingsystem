@@ -87,7 +87,7 @@ public class TicketDAO {
     public boolean checkRegularTicket(String vehicleRegNumber) {
         int numberOfOccurences = 1;
         try (Connection con = dataBaseConfig.getConnection();
-                PreparedStatement ps = con.prepareStatement(DBConstants.Get_ALL_TICKETS);) {
+                PreparedStatement ps = con.prepareStatement(DBConstants.GET_ALL_TICKETS);) {
 
             // ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             ps.setString(1, vehicleRegNumber);
