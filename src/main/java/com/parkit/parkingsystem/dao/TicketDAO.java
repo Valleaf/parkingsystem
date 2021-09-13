@@ -86,4 +86,27 @@ public class TicketDAO {
         }
         return false;
     }
+
+    public boolean checkRegularTicket(String vehicleRegNumber) {
+        Connection con = null;
+        Ticket ticket = null;
+        int numberOfOccurences = 1;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.Get_ALL_TICKETS);
+            // ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
+            ps.setString(1, vehicleRegNumber);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                numberOfOccurences = rs.getInt(1);
+            }
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+        } catch (Exception ex) {
+            logger.error("Error fetching customer status", ex);
+        } finally {
+            dataBaseConfig.closeConnection(con);
+        }
+        return (numberOfOccurences > 1);
+    }
 }
