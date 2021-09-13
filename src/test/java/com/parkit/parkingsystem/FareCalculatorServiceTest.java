@@ -154,6 +154,7 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket, true);
         assertEquals(Math.round((2 * Fare.CAR_RATE_PER_HOUR * 0.95) * 100.0) / 100.0, ticket.getPrice());
+        // todo one non regular
     }
 
 }
