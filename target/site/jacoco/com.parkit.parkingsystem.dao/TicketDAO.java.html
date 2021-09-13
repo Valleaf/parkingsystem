@@ -87,7 +87,7 @@ import java.sql.Timestamp;
     public boolean checkRegularTicket(String vehicleRegNumber) {
 <span class="nc" id="L88">        int numberOfOccurences = 1;</span>
 <span class="nc" id="L89">        try (Connection con = dataBaseConfig.getConnection();</span>
-<span class="nc" id="L90">                PreparedStatement ps = con.prepareStatement(DBConstants.Get_ALL_TICKETS);) {</span>
+<span class="nc" id="L90">                PreparedStatement ps = con.prepareStatement(DBConstants.GET_ALL_TICKETS);) {</span>
 
             // ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 <span class="nc" id="L93">            ps.setString(1, vehicleRegNumber);</span>
