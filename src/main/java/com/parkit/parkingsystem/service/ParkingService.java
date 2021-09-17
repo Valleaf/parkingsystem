@@ -15,8 +15,6 @@ public class ParkingService {
 
     private static final Logger logger = LogManager.getLogger("ParkingService");
 
-    private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
-
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
     private TicketDAO ticketDAO;
@@ -109,7 +107,7 @@ public class ParkingService {
             ticket.setOutTime(outTime);
             // If the customer is a regular, he will get a 5% discount
             if (ticketDAO.checkRegularTicket(vehicleRegNumber)) {
-                fareCalculatorService.calculateFare(ticket, true);
+                ticket.setPrice(Math.round((ticket.getPrice() * 0.95) * 100.0) / 100.0);
             }
             if (ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();

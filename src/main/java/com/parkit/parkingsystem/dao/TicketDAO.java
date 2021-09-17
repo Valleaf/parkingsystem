@@ -84,6 +84,12 @@ public class TicketDAO {
         return false;
     }
 
+    /**
+     * This function checks if the customer has already used this car park
+     * 
+     * @param vehicleRegNumber License plate of the customer
+     * @return True if the license plate is found more than once in the Database
+     */
     public boolean checkRegularTicket(String vehicleRegNumber) {
         int numberOfOccurences = 1;
         try (Connection con = dataBaseConfig.getConnection();
@@ -100,6 +106,8 @@ public class TicketDAO {
         } catch (Exception ex) {
             logger.error("Error fetching customer status", ex);
         }
+        // Will return true if there is more than one occurence of the license plate in
+        // the DB
         return (numberOfOccurences > 1);
     }
 }

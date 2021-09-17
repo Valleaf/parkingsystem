@@ -84,23 +84,31 @@ import java.sql.Timestamp;
 <span class="nc" id="L84">        return false;</span>
     }
 
+    /**
+     * This function checks if the customer has already used this car park
+     * 
+     * @param vehicleRegNumber License plate of the customer
+     * @return True if the license plate is found more than once in the Database
+     */
     public boolean checkRegularTicket(String vehicleRegNumber) {
-<span class="nc" id="L88">        int numberOfOccurences = 1;</span>
-<span class="nc" id="L89">        try (Connection con = dataBaseConfig.getConnection();</span>
-<span class="nc" id="L90">                PreparedStatement ps = con.prepareStatement(DBConstants.GET_ALL_TICKETS);) {</span>
+<span class="nc" id="L94">        int numberOfOccurences = 1;</span>
+<span class="nc" id="L95">        try (Connection con = dataBaseConfig.getConnection();</span>
+<span class="nc" id="L96">                PreparedStatement ps = con.prepareStatement(DBConstants.GET_ALL_TICKETS);) {</span>
 
             // ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-<span class="nc" id="L93">            ps.setString(1, vehicleRegNumber);</span>
-<span class="nc" id="L94">            ResultSet rs = ps.executeQuery();</span>
-<span class="nc bnc" id="L95" title="All 2 branches missed.">            if (rs.next()) {</span>
-<span class="nc" id="L96">                numberOfOccurences = rs.getInt(1);</span>
+<span class="nc" id="L99">            ps.setString(1, vehicleRegNumber);</span>
+<span class="nc" id="L100">            ResultSet rs = ps.executeQuery();</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">            if (rs.next()) {</span>
+<span class="nc" id="L102">                numberOfOccurences = rs.getInt(1);</span>
             }
-<span class="nc" id="L98">            dataBaseConfig.closeResultSet(rs);</span>
-<span class="nc" id="L99">            dataBaseConfig.closePreparedStatement(ps);</span>
-<span class="nc" id="L100">        } catch (Exception ex) {</span>
-<span class="nc" id="L101">            logger.error(&quot;Error fetching customer status&quot;, ex);</span>
+<span class="nc" id="L104">            dataBaseConfig.closeResultSet(rs);</span>
+<span class="nc" id="L105">            dataBaseConfig.closePreparedStatement(ps);</span>
+<span class="nc" id="L106">        } catch (Exception ex) {</span>
+<span class="nc" id="L107">            logger.error(&quot;Error fetching customer status&quot;, ex);</span>
         }
-<span class="nc bnc" id="L103" title="All 2 branches missed.">        return (numberOfOccurences &gt; 1);</span>
+        // Will return true if there is more than one occurence of the license plate in
+        // the DB
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        return (numberOfOccurences &gt; 1);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
