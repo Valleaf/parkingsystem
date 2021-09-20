@@ -101,6 +101,8 @@ public class ParkingService {
 
     public void processExitingVehicle() {
         try {
+            // TODO:Handle non existing number
+            // TODO:Handle duplicates
             String vehicleRegNumber = getVehichleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
