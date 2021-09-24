@@ -12,41 +12,40 @@ import java.sql.*;
     public Connection getConnection() throws ClassNotFoundException, SQLException {
 <span class="nc" id="L13">        logger.info(&quot;Create DB connection&quot;);</span>
 <span class="nc" id="L14">        Class.forName(&quot;com.mysql.cj.jdbc.Driver&quot;);</span>
-<span class="nc" id="L15">        return DriverManager.getConnection(</span>
-<span class="nc" id="L16">                &quot;jdbc:mysql://localhost:3306/prod&quot;,&quot;root&quot;,&quot;rootroot&quot;);</span>
+<span class="nc" id="L15">        return DriverManager.getConnection(&quot;jdbc:mysql://localhost:3306/prod&quot;, &quot;root&quot;, &quot;rootroot&quot;);</span>
     }
 
-    public void closeConnection(Connection con){
-<span class="nc bnc" id="L20" title="All 2 branches missed.">        if(con!=null){</span>
+    public void closeConnection(Connection con) {
+<span class="nc bnc" id="L19" title="All 2 branches missed.">        if (con != null) {</span>
             try {
-<span class="nc" id="L22">                con.close();</span>
-<span class="nc" id="L23">                logger.info(&quot;Closing DB connection&quot;);</span>
-<span class="nc" id="L24">            } catch (SQLException e) {</span>
-<span class="nc" id="L25">                logger.error(&quot;Error while closing connection&quot;,e);</span>
+<span class="nc" id="L21">                con.close();</span>
+<span class="nc" id="L22">                logger.info(&quot;Closing DB connection&quot;);</span>
+<span class="nc" id="L23">            } catch (SQLException e) {</span>
+<span class="nc" id="L24">                logger.error(&quot;Error while closing connection&quot;, e);</span>
             }
         }
-<span class="nc" id="L28">    }</span>
+<span class="nc" id="L27">    }</span>
 
     public void closePreparedStatement(PreparedStatement ps) {
-<span class="nc bnc" id="L31" title="All 2 branches missed.">        if(ps!=null){</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        if (ps != null) {</span>
             try {
-<span class="nc" id="L33">                ps.close();</span>
-<span class="nc" id="L34">                logger.info(&quot;Closing Prepared Statement&quot;);</span>
-<span class="nc" id="L35">            } catch (SQLException e) {</span>
-<span class="nc" id="L36">                logger.error(&quot;Error while closing prepared statement&quot;,e);</span>
+<span class="nc" id="L32">                ps.close();</span>
+<span class="nc" id="L33">                logger.info(&quot;Closing Prepared Statement&quot;);</span>
+<span class="nc" id="L34">            } catch (SQLException e) {</span>
+<span class="nc" id="L35">                logger.error(&quot;Error while closing prepared statement&quot;, e);</span>
             }
         }
-<span class="nc" id="L39">    }</span>
+<span class="nc" id="L38">    }</span>
 
     public void closeResultSet(ResultSet rs) {
-<span class="nc bnc" id="L42" title="All 2 branches missed.">        if(rs!=null){</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (rs != null) {</span>
             try {
-<span class="nc" id="L44">                rs.close();</span>
-<span class="nc" id="L45">                logger.info(&quot;Closing Result Set&quot;);</span>
-<span class="nc" id="L46">            } catch (SQLException e) {</span>
-<span class="nc" id="L47">                logger.error(&quot;Error while closing result set&quot;,e);</span>
+<span class="nc" id="L43">                rs.close();</span>
+<span class="nc" id="L44">                logger.info(&quot;Closing Result Set&quot;);</span>
+<span class="nc" id="L45">            } catch (SQLException e) {</span>
+<span class="nc" id="L46">                logger.error(&quot;Error while closing result set&quot;, e);</span>
             }
         }
-<span class="nc" id="L50">    }</span>
+<span class="nc" id="L49">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

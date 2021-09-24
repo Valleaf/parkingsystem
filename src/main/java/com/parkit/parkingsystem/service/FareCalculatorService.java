@@ -1,10 +1,9 @@
 package com.parkit.parkingsystem.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.ZoneId;
-
+ 
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
 
@@ -18,25 +17,32 @@ public class FareCalculatorService {
         Duration duration = Duration.between(ticket.getInTime().toInstant(), ticket.getOutTime().toInstant());
         long hoursPassed = duration.toHours();
         float minutes = duration.toMinutes() % 60;
-        System.out.println("minutes:" + minutes);
-        // TODO: Some tests are failing here. Need to check if this logic is correct
-        System.out.println("duration: " + duration + "hoursPassed: " + hoursPassed);
         float realDuration = hoursPassed + minutes / 60;
-        realDuration = BigDecimal.valueOf(realDuration).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-
-        System.out.println("realDuration: " + realDuration);
-
-        switch (ticket.getParkingSpot().getParkingType()) {
-            case CAR: {
-                ticket.setPrice(realDuration * Fare.CAR_RATE_PER_HOUR);
-                break;
+        realDuration = BigDecimal.valueOf(realDuration).setScale(2, RoundingMode.HALF_EVEN).floatValue();
+        if (realDuration < 0.5) {
+            ticket.setPrice(0);
+        } else {
+            switch (ticket.getParkingSpot().getParkingType()) {
+                case CAR: {
+                    ticket.setPrice(realDuration * Fare.CAR_RATE_PER_HOUR);
+                    break;
+                }
+                case BIKE: {
+                    ticket.setPrice(realDuration * Fare.BIKE_RATE_PER_HOUR);
+                    break;
+                }
+                default:
+                    throw new IllegalArgumentException("Unkown Parking Type");
             }
-            case BIKE: {
-                ticket.setPrice(realDuration * Fare.BIKE_RATE_PER_HOUR);
-                break;
-            }
-            default:
-                throw new IllegalArgumentException("Unkown Parking Type");
         }
+    }
+
+    /**
+     * If customer is a regular, we discount 5% from the price
+     */
+    public void calculateFare(Ticket ticket, boolean isRegular) {
+        calculateFare(ticket);
+        if (isRegular)
+            ticket.setPrice(Math.round((ticket.getPrice() * 0.95) * 100.0) / 100.0);
     }
 }
