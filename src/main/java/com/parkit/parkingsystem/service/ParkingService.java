@@ -107,10 +107,11 @@ public class ParkingService {
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
-            fareCalculatorService.calculateFare(ticket);
             // If the customer is a regular, he will get a 5% discount
             if (ticketDAO.checkRegularTicket(vehicleRegNumber)) {
-                ticket.setPrice(Math.round((ticket.getPrice() * 0.95) * 100.0) / 100.0);
+                fareCalculatorService.calculateFare(ticket, true);
+            } else {
+                fareCalculatorService.calculateFare(ticket);
             }
             if (ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();

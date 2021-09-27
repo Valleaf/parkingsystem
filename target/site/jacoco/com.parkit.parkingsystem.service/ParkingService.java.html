@@ -102,16 +102,16 @@ public class ParkingService {
 
     public void processExitingVehicle() {
         try {
-            // TODO:Handle non existing number
-            // TODO:Handle duplicates
-<span class="fc" id="L107">            String vehicleRegNumber = getVehichleRegNumber();</span>
-<span class="fc" id="L108">            Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);</span>
-<span class="fc" id="L109">            Date outTime = new Date();</span>
-<span class="fc" id="L110">            ticket.setOutTime(outTime);</span>
-<span class="fc" id="L111">            fareCalculatorService.calculateFare(ticket);</span>
+
+<span class="fc" id="L106">            String vehicleRegNumber = getVehichleRegNumber();</span>
+<span class="fc" id="L107">            Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);</span>
+<span class="fc" id="L108">            Date outTime = new Date();</span>
+<span class="fc" id="L109">            ticket.setOutTime(outTime);</span>
             // If the customer is a regular, he will get a 5% discount
-<span class="pc bpc" id="L113" title="1 of 2 branches missed.">            if (ticketDAO.checkRegularTicket(vehicleRegNumber)) {</span>
-<span class="nc" id="L114">                ticket.setPrice(Math.round((ticket.getPrice() * 0.95) * 100.0) / 100.0);</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">            if (ticketDAO.checkRegularTicket(vehicleRegNumber)) {</span>
+<span class="nc" id="L112">                fareCalculatorService.calculateFare(ticket, true);</span>
+<span class="nc" id="L113">            } else {</span>
+<span class="fc" id="L114">                fareCalculatorService.calculateFare(ticket);</span>
             }
 <span class="pc bpc" id="L116" title="1 of 2 branches missed.">            if (ticketDAO.updateTicket(ticket)) {</span>
 <span class="fc" id="L117">                ParkingSpot parkingSpot = ticket.getParkingSpot();</span>
@@ -125,7 +125,7 @@ public class ParkingService {
 <span class="nc" id="L125">                System.out.println(&quot;Unable to update ticket information. Error occurred&quot;);</span>
             }
 <span class="nc" id="L127">        } catch (Exception e) {</span>
-<span class="nc" id="L128">            logger.error(&quot;Unable to process exiting vehicle&quot;, e);</span>
+<span class="nc" id="L128">            logger.error(&quot;Unable to process exiting vehicle&quot;);</span>
         }
 <span class="fc" id="L130">    }</span>
 
