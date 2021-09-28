@@ -3,7 +3,7 @@ package com.parkit.parkingsystem.service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
- 
+
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
 

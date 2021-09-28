@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
@@ -30,6 +31,8 @@ import java.time.LocalDateTime;
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
 
+    private static final String LICENSE_PLATE = "ABCDEF";
+    private static final String LICENSE_PLATE2 = "CBDEF";
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private static ParkingSpotDAO parkingSpotDAO;
     private static TicketDAO ticketDAO;
@@ -50,13 +53,12 @@ public class ParkingDataBaseIT {
     @BeforeEach
     private void setUpPerTest() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(1);
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(LICENSE_PLATE);
         dataBasePrepareService.clearDataBaseEntries();
     }
 
     @AfterAll
     private static void tearDown() {
-
     }
 
     @Test
@@ -72,7 +74,9 @@ public class ParkingDataBaseIT {
         System.out.println("Please type the vehicle registration number and press enter key");
         try {
             Ticket ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
-            System.out.println("Ticket : " + ticket.getId());
+            System.out.println("Parking spot number : " + ticket.getParkingSpot().getId());
+            Ticket exepectedTicket = ticketDAO.getTicket(LICENSE_PLATE);
+            System.out.println("Ticket id : " + exepectedTicket.getId());
             ParkingSpot ps = ticket.getParkingSpot();
             System.out.println("Spot " + spotBefore + " available : " + ps.isAvailable());
             assertEquals(false, ps.isAvailable());
@@ -83,16 +87,45 @@ public class ParkingDataBaseIT {
     }
 
     @Test
-    public void testParkingLotExit() {
+    void testParkingABike() {
+        when(inputReaderUtil.readSelection()).thenReturn(2);
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        int spotBefore = parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE);
+        System.out.println("Available number before test : " + spotBefore);
+        // Incoming vehicle
+        parkingService.processIncomingVehicle();
+        // Check that a ticket is actually saved in DB and Parking table is updated
+        // with availability
+        // check both db for data
+        System.out.println("Please type the vehicle registration number and press enter key");
+        try {
+            Ticket ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
+            System.out.println("Parking spot number : " + ticket.getParkingSpot().getId());
+            Ticket exepectedTicket = ticketDAO.getTicket(LICENSE_PLATE);
+            System.out.println("Ticket id : " + exepectedTicket.getId());
+            ParkingSpot ps = ticket.getParkingSpot();
+            System.out.println("Spot " + spotBefore + " available : " + ps.isAvailable());
+            assertEquals(false, ps.isAvailable());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void testParkingLotExit() {
         testParkingACar();
+        Ticket ticket = ticketDAO.getTicket(LICENSE_PLATE);
+        System.out.println("Out Time : " + ticket.getOutTime());
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
         Date currentTime = DateUtils.round(new Date(), Calendar.MINUTE);
         // Check that the fare generated and out time are populated correctly in
         // the database
         try {
-            Ticket ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
+            ticket = ticketDAO.getTicket(LICENSE_PLATE);
             System.out.println("Current time : " + LocalDateTime.now());
+            System.out.println("Out Time 2 : " + ticket.getOutTime());
             Date timeOnTicket = DateUtils.round(ticket.getOutTime(), Calendar.MINUTE);
             double ticketPrice = ticket.getPrice();
             System.out.println(ticketPrice);
